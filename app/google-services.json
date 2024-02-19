@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "343561595150",
+    "project_id": "coursefactory-51456",
+    "storage_bucket": "coursefactory-51456.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:343561595150:android:9dcdd192ed2c74cf9b0f5f",
+        "android_client_info": {
+          "package_name": "com.example.coursefactory"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBY96jWgskMo0lS60-YtYWBV1TgKQkrF4A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

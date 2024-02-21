@@ -22,8 +22,6 @@ public class UserService {
 
         HashMap<String, Object> userMap = new HashMap<>();
         userMap.put("Name", user.getName());
-        userMap.put("birthYear", user.getProfilePicture());
-
         return ref.setValue(userMap).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 myUser = user;
@@ -36,7 +34,7 @@ public class UserService {
 
         return ref.get().continueWith(task -> {
             if (task.isSuccessful()) {
-                String name = task.getResult().child("name").getValue(String.class);
+                String name = task.getResult().child("Name").getValue(String.class);
                 UserProfile profile = new UserProfile(name);
 
                 if (Objects.equals(userId, FirebaseAuth.getInstance().getCurrentUser().getUid())) {

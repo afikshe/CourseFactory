@@ -1,16 +1,20 @@
 package com.example.coursefactory;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.auth.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,7 +23,12 @@ import com.google.firebase.auth.FirebaseAuth;
  */
 public class HomeFragment extends Fragment {
 
+    private static final String TAG = "HomeFragment";
+
+
     Button logoutButton;
+    TextView userNameTextView;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -68,9 +77,17 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        userNameTextView = view.findViewById(R.id.userNameTextView);
+        String userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
+        UserService.getUserById(userId)
+                .addOnCompleteListener(task -> {
+                    //Log.d(TAG, "onCreateView: " + "*" + UserService.myUser.getName() + "*");
+                    String userName=UserService.myUser.getName();
+                    userNameTextView.setText(userName);
+                });
+
         // Find the logoutButton within the inflated layout
         logoutButton = view.findViewById(R.id.logoutButton);
-
         // Set click listener for logoutButton
         logoutButton.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();

@@ -4,7 +4,10 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,8 +16,24 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.AggregateQuery;
+import com.google.firebase.firestore.AggregateQuerySnapshot;
+import com.google.firebase.firestore.AggregateSource;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.auth.User;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,11 +42,17 @@ import com.google.firebase.firestore.auth.User;
  */
 public class HomeFragment extends Fragment {
 
-    private static final String TAG = "HomeFragment";
+    private static final String KEY_NAME = "name";
+    private static final String KEY_SHORT_DESCRIPTION = "shortDescription";
+    private static final String KEY_LONG_DESCRIPTION = "longDescription";
 
-
+    ArrayList<CourseProfile> courseProfiles = new ArrayList<>();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private String[] coursesId = {"ZOpf5ccNEOSoXF5UOb3I", "NtWCfXonSSHYgEa71gVT", "t7AWRXSI7JMQofnX7H2t", "qm0svv73KX8EXgGFa1VD", "I3zq69Evg4uqiUV4roU2"};
     Button logoutButton;
     TextView userNameTextView;
+
+    private C_RecyclerViewAdapter adapter; // Declare the adapter as a field
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -78,13 +103,19 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         userNameTextView = view.findViewById(R.id.userNameTextView);
-        String userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         UserService.getUserById(userId)
                 .addOnCompleteListener(task -> {
-                    //Log.d(TAG, "onCreateView: " + "*" + UserService.myUser.getName() + "*");
-                    String userName=UserService.myUser.getName();
+                    String userName = UserService.myUser.getName();
                     userNameTextView.setText(userName);
                 });
+
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+        setUpCourseProfiles();
+
+        adapter = new C_RecyclerViewAdapter(requireContext(), courseProfiles); // Initialize the adapter
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         // Find the logoutButton within the inflated layout
         logoutButton = view.findViewById(R.id.logoutButton);
@@ -97,5 +128,31 @@ public class HomeFragment extends Fragment {
 
         return view;
     }
+
+    private void setUpCourseProfiles() {
+        Query query = db.collection("courses");
+        AggregateQuery countQuery = query.count();
+        countQuery.get(AggregateSource.SERVER).addOnCompleteListener(new OnCompleteListener<AggregateQuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<AggregateQuerySnapshot> task) {
+                AggregateQuerySnapshot snapshot = task.getResult();
+                for (int i = 0; i < snapshot.getCount(); i++) {
+                    DocumentReference documentReference = db.collection("courses").document(coursesId[i]);
+
+                    documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            courseProfiles.add(new CourseProfile(documentSnapshot.getString(KEY_NAME),
+                                    documentSnapshot.getString(KEY_SHORT_DESCRIPTION),
+                                    documentSnapshot.getString(KEY_LONG_DESCRIPTION),
+                                    R.drawable.course_image));
+                            adapter.notifyDataSetChanged(); // Notify adapter of data change
+                        }
+                    });
+                }
+            }
+        });
+    }
+
 
 }

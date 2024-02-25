@@ -2,6 +2,7 @@ package com.example.coursefactory;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -35,6 +36,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import io.grpc.Context;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link HomeFragment#newInstance} factory method to
@@ -48,6 +51,7 @@ public class HomeFragment extends Fragment {
 
     ArrayList<CourseProfile> courseProfiles = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
     private String[] coursesId = {"ZOpf5ccNEOSoXF5UOb3I", "NtWCfXonSSHYgEa71gVT", "t7AWRXSI7JMQofnX7H2t", "qm0svv73KX8EXgGFa1VD", "I3zq69Evg4uqiUV4roU2"};
     Button logoutButton;
     TextView userNameTextView;
@@ -137,17 +141,20 @@ public class HomeFragment extends Fragment {
             public void onComplete(@NonNull Task<AggregateQuerySnapshot> task) {
                 AggregateQuerySnapshot snapshot = task.getResult();
                 for (int i = 0; i < snapshot.getCount(); i++) {
-                    DocumentReference documentReference = db.collection("courses").document(coursesId[i]);
 
-                    documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            courseProfiles.add(new CourseProfile(documentSnapshot.getString(KEY_NAME),
-                                    documentSnapshot.getString(KEY_SHORT_DESCRIPTION),
-                                    documentSnapshot.getString(KEY_LONG_DESCRIPTION),
-                                    R.drawable.course_image));
-                            adapter.notifyDataSetChanged(); // Notify adapter of data change
-                        }
+                    final int index = i;
+                    DocumentReference documentReference = db.collection("courses").document(coursesId[i]);
+                    StorageReference storageReference = storage.getReference().child("Courses/"+ coursesId[index] +"/courseImage.png");
+                    documentReference.get().addOnSuccessListener(documentSnapshot -> {
+                        storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+
+                        courseProfiles.add(new CourseProfile(documentSnapshot.getString(KEY_NAME),
+                                documentSnapshot.getString(KEY_SHORT_DESCRIPTION),
+                                documentSnapshot.getString(KEY_LONG_DESCRIPTION),
+                                uri.toString()));
+                        adapter.notifyDataSetChanged(); // Notify adapter of data change
+
+                        });
                     });
                 }
             }

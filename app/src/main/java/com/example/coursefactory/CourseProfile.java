@@ -1,16 +1,18 @@
 package com.example.coursefactory;
 
+import android.net.Uri;
+
 public class CourseProfile {
     String courseName;
     String courseShortDecription;
     String courseDecription;
-    int image;
+    String imageUrl;
 
-    public CourseProfile(String courseName, String courseShortDecription, String courseLongDecription, int image) {
+    public CourseProfile(String courseName, String courseShortDecription, String courseLongDecription, String imageUrl) {
         this.courseName = courseName;
         this.courseShortDecription = courseShortDecription;
         this.courseDecription = courseLongDecription;
-        this.image = image;
+        this.imageUrl = imageUrl;
     }
 
 
@@ -26,7 +28,7 @@ public class CourseProfile {
         return courseDecription;
     }
 
-    public int getImage() {
-        return image;
+    public String getImageUrl() {
+        return imageUrl;
     }
 }

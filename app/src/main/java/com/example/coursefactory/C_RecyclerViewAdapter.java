@@ -1,5 +1,6 @@
 package com.example.coursefactory;
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import com.squareup.picasso.Picasso;
+
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -17,6 +24,7 @@ public class C_RecyclerViewAdapter extends RecyclerView.Adapter<C_RecyclerViewAd
 
     Context context;
     ArrayList<CourseProfile> courseProfiles;
+
 
     public C_RecyclerViewAdapter(Context context, ArrayList<CourseProfile> courseProfiles){
         this.context = context;
@@ -38,10 +46,12 @@ public class C_RecyclerViewAdapter extends RecyclerView.Adapter<C_RecyclerViewAd
         // assigning values to the views we created in the recycler_view_row layout file
         // based on the position of the recycler view
 
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+
         holder.courseNameTextView.setText(courseProfiles.get(position).getCourseName());
         holder.courseShortDescriptionTextView.setText(courseProfiles.get(position).getCourseShortDecription());
-        holder.coursePictureImageView.setImageResource(courseProfiles.get(position).getImage());
-
+        String url =courseProfiles.get(position).getImageUrl();
+        Picasso.get().load(url).resize(0, 550).into(holder.coursePictureImageView);
     }
 
     @Override

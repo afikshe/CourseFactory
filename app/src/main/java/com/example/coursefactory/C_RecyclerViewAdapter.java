@@ -1,6 +1,5 @@
 package com.example.coursefactory;
 import android.content.Context;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +9,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -29,7 +25,6 @@ public class C_RecyclerViewAdapter extends RecyclerView.Adapter<C_RecyclerViewAd
     public C_RecyclerViewAdapter(Context context, ArrayList<CourseProfile> courseProfiles){
         this.context = context;
         this.courseProfiles = courseProfiles;
-
     }
 
     @NonNull
@@ -48,10 +43,9 @@ public class C_RecyclerViewAdapter extends RecyclerView.Adapter<C_RecyclerViewAd
 
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
-        holder.courseNameTextView.setText(courseProfiles.get(position).getCourseName());
-        holder.courseShortDescriptionTextView.setText(courseProfiles.get(position).getCourseShortDecription());
-        String url =courseProfiles.get(position).getImageUrl();
-        Picasso.get().load(url).resize(0, 550).into(holder.coursePictureImageView);
+        holder.courseNameTextView.setText(Firebase.getCourseName(courseProfiles.get(position)));
+        holder.courseDescriptionTextView.setText(Firebase.getCourseDescription(courseProfiles.get(position)));
+        Picasso.get().load(Firebase.getCourseImageUri(courseProfiles.get(position))).resize(0, 550).into(holder.coursePictureImageView);
     }
 
     @Override
@@ -65,14 +59,14 @@ public class C_RecyclerViewAdapter extends RecyclerView.Adapter<C_RecyclerViewAd
         // Kinda like in the onCreate method
 
         ImageView coursePictureImageView;
-        TextView courseNameTextView, courseShortDescriptionTextView;
+        TextView courseNameTextView, courseDescriptionTextView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             coursePictureImageView = itemView.findViewById(R.id.coursePictureImageView);
             courseNameTextView = itemView.findViewById(R.id.courseNameTextView);
-            courseShortDescriptionTextView = itemView.findViewById(R.id.courseShortDescriptionTextView);
+            courseDescriptionTextView = itemView.findViewById(R.id.descriptionTextView);
 
         }
     }

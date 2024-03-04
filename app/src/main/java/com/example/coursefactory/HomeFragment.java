@@ -28,6 +28,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -45,14 +47,10 @@ import io.grpc.Context;
  */
 public class HomeFragment extends Fragment {
 
-    private static final String KEY_NAME = "name";
-    private static final String KEY_SHORT_DESCRIPTION = "shortDescription";
-    private static final String KEY_LONG_DESCRIPTION = "longDescription";
 
     ArrayList<CourseProfile> courseProfiles = new ArrayList<>();
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
-    private String[] coursesId = {"ZOpf5ccNEOSoXF5UOb3I", "NtWCfXonSSHYgEa71gVT", "t7AWRXSI7JMQofnX7H2t", "qm0svv73KX8EXgGFa1VD", "I3zq69Evg4uqiUV4roU2"};
+
+
     Button logoutButton;
     TextView userNameTextView;
 
@@ -114,12 +112,13 @@ public class HomeFragment extends Fragment {
                     userNameTextView.setText(userName);
                 });
 
+        courseProfiles = Firebase.getCourseProfiles();
+
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-        setUpCourseProfiles();
 
         adapter = new C_RecyclerViewAdapter(requireContext(), courseProfiles); // Initialize the adapter
-        recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        recyclerView.setAdapter(adapter);
 
         // Find the logoutButton within the inflated layout
         logoutButton = view.findViewById(R.id.logoutButton);
@@ -131,34 +130,6 @@ public class HomeFragment extends Fragment {
         });
 
         return view;
-    }
-
-    private void setUpCourseProfiles() {
-        Query query = db.collection("courses");
-        AggregateQuery countQuery = query.count();
-        countQuery.get(AggregateSource.SERVER).addOnCompleteListener(new OnCompleteListener<AggregateQuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<AggregateQuerySnapshot> task) {
-                AggregateQuerySnapshot snapshot = task.getResult();
-                for (int i = 0; i < snapshot.getCount(); i++) {
-
-                    final int index = i;
-                    DocumentReference documentReference = db.collection("courses").document(coursesId[i]);
-                    StorageReference storageReference = storage.getReference().child("Courses/"+ coursesId[index] +"/courseImage.png");
-                    documentReference.get().addOnSuccessListener(documentSnapshot -> {
-                        storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
-
-                        courseProfiles.add(new CourseProfile(documentSnapshot.getString(KEY_NAME),
-                                documentSnapshot.getString(KEY_SHORT_DESCRIPTION),
-                                documentSnapshot.getString(KEY_LONG_DESCRIPTION),
-                                uri.toString()));
-                        adapter.notifyDataSetChanged(); // Notify adapter of data change
-
-                        });
-                    });
-                }
-            }
-        });
     }
 
 

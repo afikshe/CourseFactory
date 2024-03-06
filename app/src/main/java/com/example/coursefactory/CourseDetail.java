@@ -16,6 +16,7 @@ public class CourseDetail extends AppCompatActivity {
     TextView courseNameTextView, courseDescriptionTextView;
     ImageView coursePictureImageView;
     Button addCourseButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +36,7 @@ public class CourseDetail extends AppCompatActivity {
 
     }
 
-    void uploadCourse(CourseProfile courseProfile){
+    void uploadCourse(CourseProfile courseProfile) {
 
     }
 }

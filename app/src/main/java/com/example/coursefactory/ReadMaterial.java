@@ -1,6 +1,6 @@
 package com.example.coursefactory;
 
-public class ReadMaterial extends StudyMaterial{
+public class ReadMaterial extends StudyMaterial {
 
     String content;
 

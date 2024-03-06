@@ -35,31 +35,31 @@ public class Signup extends AppCompatActivity {
         });
     }
 
-    private void signUp(){
+    private void signUp() {
         String email = emailEditText.getText().toString();
         String name = nameEditText.getText().toString();
         String password = passwordEditText.getText().toString();
 
         UserProfile userProfile = new UserProfile(name);
 
-        if(email.isEmpty() || name.isEmpty() || password.isEmpty()){
-            Toast.makeText(this, "Please enter email, name & password",  Toast.LENGTH_SHORT).show();
+        if (email.isEmpty() || name.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Please enter email, name & password", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener( task -> {
-            if(task.isSuccessful()){
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
                 UserService.setMyUser(userProfile).addOnCompleteListener(task1 -> {
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         Toast.makeText(this, "User created successfully", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(Signup.this, Splash.class));
-                    }else {
+                    } else {
                         Toast.makeText(this, task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
 
 
-            }else {
+            } else {
                 Toast.makeText(this, task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
         });

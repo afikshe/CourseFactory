@@ -13,7 +13,8 @@ import java.util.Objects;
 public class UserService {
 
     static UserProfile myUser;
-    static Task<Void> setMyUser(UserProfile user){
+
+    static Task<Void> setMyUser(UserProfile user) {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -28,7 +29,8 @@ public class UserService {
             }
         });
     }
-    static Task<UserProfile> getUserById(String userId){
+
+    static Task<UserProfile> getUserById(String userId) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("users/" + userId);
 

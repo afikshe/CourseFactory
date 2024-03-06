@@ -33,21 +33,21 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    private void logIn(){
+    private void logIn() {
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
 
-        if(email.isEmpty() || password.isEmpty()){
-            Toast.makeText(this, "Please enter email & password",  Toast.LENGTH_SHORT).show();
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Please enter email & password", Toast.LENGTH_SHORT).show();
             return;
         }
 
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
+            if (task.isSuccessful()) {
                 Toast.makeText(this, "User logged in successfully", Toast.LENGTH_SHORT).show();
                 Toast.makeText(this, "User created successfully", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(Login.this, Splash.class));
-            }else {
+            } else {
                 Toast.makeText(this, task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
 

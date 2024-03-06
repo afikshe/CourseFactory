@@ -41,11 +41,10 @@ public class C_RecyclerViewAdapter extends RecyclerView.Adapter<C_RecyclerViewAd
         // assigning values to the views we created in the recycler_view_row layout file
         // based on the position of the recycler view
 
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
-        holder.courseNameTextView.setText(Firebase.getCourseName(courseProfiles.get(position)));
-        holder.courseDescriptionTextView.setText(Firebase.getCourseDescription(courseProfiles.get(position)));
-        Picasso.get().load(Firebase.getCourseImageUri(courseProfiles.get(position))).resize(0, 550).into(holder.coursePictureImageView);
+        holder.courseNameTextView.setText(cpyFirebase.getCourseName(courseProfiles.get(position)));
+        holder.courseDescriptionTextView.setText(cpyFirebase.getCourseDescription(courseProfiles.get(position)));
+        Picasso.get().load(cpyFirebase.getCourseImageUri(courseProfiles.get(position))).resize(0, 550).into(holder.coursePictureImageView);
     }
 
     @Override

@@ -22,9 +22,9 @@ public class MainActivity extends AppCompatActivity {
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
 
-            if(item.getItemId() == R.id.home){
+            if (item.getItemId() == R.id.home) {
                 replaceFragment(new HomeFragment());
-            }else if(item.getItemId() == R.id.profile) {
+            } else if (item.getItemId() == R.id.profile) {
                 replaceFragment(new ProfileFragment());
             } else if (item.getItemId() == R.id.settings) {
                 replaceFragment(new SettingsFragment());
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void replaceFragment(Fragment fragment){
+    private void replaceFragment(Fragment fragment) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

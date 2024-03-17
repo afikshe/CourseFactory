@@ -49,7 +49,7 @@ public class C_RecyclerViewAdapter extends RecyclerView.Adapter<C_RecyclerViewAd
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
         holder.courseNameTextView.setText(courseProfiles.get(position).getCourseName());
-        holder.courseShortDescriptionTextView.setText(courseProfiles.get(position).getCourseShortDecription());
+        holder.courseShortDescriptionTextView.setText(courseProfiles.get(position).getCourseDescription());
         String url =courseProfiles.get(position).getImageUrl();
         Picasso.get().load(url).resize(0, 550).into(holder.coursePictureImageView);
     }

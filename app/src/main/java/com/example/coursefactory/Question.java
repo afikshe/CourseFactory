@@ -2,11 +2,21 @@ package com.example.coursefactory;
 
 public class Question {
 
-    String questionContent, correctAnswer;
+    String questionId, questionContent, correctAnswer;
 
-    public Question(String questionContent, String correctAnswer) {
+    public Question(String questionId, String questionContent, String correctAnswer) {
+        this.questionId = questionId;
         this.questionContent = questionContent;
         this.correctAnswer = correctAnswer;
+    }
+
+    public Question(String questionId, String questionContent) {
+        this.questionId = questionId;
+        this.questionContent = questionContent;
+    }
+
+    public String getQuestionId() {
+        return questionId;
     }
 
     public String getQuestionContent() {

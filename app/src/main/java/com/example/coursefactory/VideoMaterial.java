@@ -4,8 +4,8 @@ public class VideoMaterial extends StudyMaterial{
 
     String url;
 
-    public VideoMaterial(String title, String description, String url) {
-        super(title, description);
+    public VideoMaterial(String lessonId, String title, String url) {
+        super(lessonId, title);
         this.url = url;
     }
 

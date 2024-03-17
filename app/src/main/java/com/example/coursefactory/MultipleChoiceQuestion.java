@@ -5,8 +5,8 @@ public class MultipleChoiceQuestion extends Question{
     String option1, option2, option3, option4;
     Integer points;
 
-    public MultipleChoiceQuestion(String questionContent, String correctAnswer, String option1, String option2, String option3, String option4) {
-        super(questionContent, correctAnswer);
+    public MultipleChoiceQuestion(String questionId, String questionContent, String correctAnswer, String option1, String option2, String option3, String option4) {
+        super(questionId, questionContent, correctAnswer);
         this.option1 = option1;
         this.option2 = option2;
         this.option3 = option3;

@@ -2,18 +2,18 @@ package com.example.coursefactory;
 
 public class StudyMaterial {
 
-    String title, description;
+    String lessonId, title;
 
-    public StudyMaterial(String title, String description) {
+    public StudyMaterial(String lessonId, String title) {
+        this.lessonId = lessonId;
         this.title = title;
-        this.description = description;
+    }
+
+    public String getLessonId() {
+        return lessonId;
     }
 
     public String getTitle() {
         return title;
-    }
-
-    public String getDescription() {
-        return description;
     }
 }

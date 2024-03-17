@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.example.coursefactory.databinding.ActivityMainBinding;
 
@@ -18,7 +19,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        replaceFragment(new HomeFragment());
+
+
+        CourseService.getAllCoursesNew().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                replaceFragment(new HomeFragment());
+
+
+            }else{
+                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+            }
+
+        });
+
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
 

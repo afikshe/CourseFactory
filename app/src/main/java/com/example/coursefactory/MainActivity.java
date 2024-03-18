@@ -20,18 +20,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
-        CourseService.getAllCoursesNew().addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
-                replaceFragment(new HomeFragment());
-
-
-            }else{
-                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
-            }
-
-        });
-
+       replaceFragment(new HomeFragment());
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
 

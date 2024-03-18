@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.AggregateQuery;
 import com.google.firebase.firestore.AggregateQuerySnapshot;
@@ -29,6 +30,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -36,6 +38,7 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import io.grpc.Context;
 
@@ -117,6 +120,20 @@ public class HomeFragment extends Fragment {
                 });
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+
+/*
+
+        // Block and wait for the task to complete
+        try {
+            Task<QuerySnapshot> task = CourseService.getAllCoursesNew();
+            QuerySnapshot querySnapshot = Tasks.await(task);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+*/
 
         adapter = new C_RecyclerViewAdapter(requireContext(), CourseService.allCourses); // Initialize the adapter
         recyclerView.setAdapter(adapter);

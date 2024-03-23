@@ -1,12 +1,22 @@
 package com.example.coursefactory;
 
+import android.content.Intent;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+
+import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +24,10 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class ProfileFragment extends Fragment {
+
+    ImageView imageView;
+    FloatingActionButton button;
+    Button logoutButton;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,12 +67,41 @@ public class ProfileFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        imageView = view.findViewById(R.id.imageView);
+        button = view.findViewById(R.id.floatingActionButton);
+        logoutButton = view.findViewById(R.id.logoutButton);
+
+        button.setOnClickListener(v ->{
+            ImagePicker.with(this)
+                    .crop()	    			//Crop image(Optional), Check Customization for more option
+                    .compress(1024)			//Final image size will be less than 1 MB(Optional)
+                    .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                    .start();
+        });
+
+        logoutButton.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            UserService.myUser = null;
+            startActivity(new Intent(getActivity(), Splash.class));
+        });
+
+        return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Uri uri = data.getData();
+        imageView.setImageURI(uri);
     }
 }

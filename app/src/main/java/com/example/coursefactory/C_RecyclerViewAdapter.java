@@ -22,14 +22,15 @@ import java.util.ArrayList;
 
 public class C_RecyclerViewAdapter extends RecyclerView.Adapter<C_RecyclerViewAdapter.MyViewHolder> {
 
+    private final  RecyclerViewInterface recyclerViewInterface;
     Context context;
     ArrayList<CourseProfile> courseProfiles;
 
 
-    public C_RecyclerViewAdapter(Context context, ArrayList<CourseProfile> courseProfiles){
+    public C_RecyclerViewAdapter(Context context, ArrayList<CourseProfile> courseProfiles, RecyclerViewInterface recyclerViewInterface){
         this.context = context;
         this.courseProfiles = courseProfiles;
-
+        this.recyclerViewInterface = recyclerViewInterface;
     }
 
     @NonNull
@@ -38,7 +39,7 @@ public class C_RecyclerViewAdapter extends RecyclerView.Adapter<C_RecyclerViewAd
         // This is where you inflate the layout (Giving a look to our rows)
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.recycler_view_row, parent, false);
-        return new C_RecyclerViewAdapter.MyViewHolder(view);
+        return new C_RecyclerViewAdapter.MyViewHolder(view, recyclerViewInterface);
     }
 
     @Override
@@ -46,7 +47,6 @@ public class C_RecyclerViewAdapter extends RecyclerView.Adapter<C_RecyclerViewAd
         // assigning values to the views we created in the recycler_view_row layout file
         // based on the position of the recycler view
 
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
         holder.courseNameTextView.setText(courseProfiles.get(position).getCourseName());
         holder.courseShortDescriptionTextView.setText(courseProfiles.get(position).getCourseDescription());
@@ -67,12 +67,24 @@ public class C_RecyclerViewAdapter extends RecyclerView.Adapter<C_RecyclerViewAd
         ImageView coursePictureImageView;
         TextView courseNameTextView, courseShortDescriptionTextView;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
 
             coursePictureImageView = itemView.findViewById(R.id.coursePictureImageView);
             courseNameTextView = itemView.findViewById(R.id.courseNameTextView);
             courseShortDescriptionTextView = itemView.findViewById(R.id.courseShortDescriptionTextView);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(recyclerViewInterface != null){
+                        int pos = getAdapterPosition();
+                        if(pos != RecyclerView.NO_POSITION){
+                            recyclerViewInterface.onItemClick(pos);
+                        }
+                    }
+                }
+            });
 
         }
     }

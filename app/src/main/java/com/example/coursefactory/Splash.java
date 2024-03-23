@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,26 +19,18 @@ public class Splash extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        CourseService.getAllCoursesNew();
+
         new Handler().postDelayed(() ->{
             FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
             if(currentUser != null){
 
-                CourseService.getAllCoursesNew().addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
                         startActivity(new Intent(Splash.this, MainActivity.class));
-
-
-                    }else{
-                        Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
-                    }
-
-                });
-
 
             }else {
                 startActivity(new Intent(Splash.this, Login.class));
             }
             finish();
-        }, 500);
+        }, 3000);
     }
 }

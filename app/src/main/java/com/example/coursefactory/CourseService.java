@@ -116,7 +116,7 @@ public class CourseService {
 
                 Task<Void> courseTask = db.collection("courses").document(courseId).get().continueWithTask(documentSnapshot -> {
                     String courseName = documentSnapshot.getResult().getString("name");
-                    String details = documentSnapshot.getResult().getString("description");
+                    String details = documentSnapshot.getResult().getString("details");
                     String description = documentSnapshot.getResult().getString("description");
                     ArrayList<StudyMaterial> lessons = new ArrayList<>();
                     List<Task<Void>> lessonTasks = new ArrayList<>();

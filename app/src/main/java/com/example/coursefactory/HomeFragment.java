@@ -47,18 +47,8 @@ import io.grpc.Context;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements  RecyclerViewInterface {
 
-    private static final String KEY_NAME = "name";
-    private static final String KEY_DESCRIPTION = "description";
-    private static final String KEY_DETAILS = "details";
-
-    //ArrayList<CourseProfile> courseProfiles = new ArrayList<>();
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
-//    private String[] coursesId = {"ZOpf5ccNEOSoXF5UOb3I", "NtWCfXonSSHYgEa71gVT", "t7AWRXSI7JMQofnX7H2t", "qm0svv73KX8EXgGFa1VD", "I3zq69Evg4uqiUV4roU2"};
-    private String[] coursesId = {"ZOpf5ccNEOSoXF5UOb3I"};
-    Button logoutButton;
     TextView userNameTextView;
 
     private C_RecyclerViewAdapter adapter; // Declare the adapter as a field
@@ -121,35 +111,20 @@ public class HomeFragment extends Fragment {
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
 
-/*
 
-        // Block and wait for the task to complete
-        try {
-            Task<QuerySnapshot> task = CourseService.getAllCoursesNew();
-            QuerySnapshot querySnapshot = Tasks.await(task);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-*/
-
-        adapter = new C_RecyclerViewAdapter(requireContext(), CourseService.allCourses); // Initialize the adapter
+        adapter = new C_RecyclerViewAdapter(requireContext(), CourseService.allCourses, this); // Initialize the adapter
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-
-
-        // Find the logoutButton within the inflated layout
-        logoutButton = view.findViewById(R.id.logoutButton);
-        // Set click listener for logoutButton
-        logoutButton.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
-            UserService.myUser = null;
-            startActivity(new Intent(getActivity(), Splash.class));
-        });
 
         return view;
     }
 
+    @Override
+    public void onItemClick(int position) {
+        Intent intent = new Intent(getActivity(), CourseDetails.class);
+
+        intent.putExtra("POSITION", position);
+
+        startActivity(intent);
+    }
 }

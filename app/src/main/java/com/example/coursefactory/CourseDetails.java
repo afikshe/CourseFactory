@@ -1,18 +1,26 @@
 package com.example.coursefactory;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
 
 public class CourseDetails extends AppCompatActivity {
 
@@ -46,6 +54,44 @@ public class CourseDetails extends AppCompatActivity {
 
         returnButton.setOnClickListener(v ->{
             startActivity(new Intent(CourseDetails.this, MainActivity.class));
+        });
+
+        //TODO
+        addButton.setOnClickListener(v ->{
+
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            if(addButton.getText().equals("Add to my courses")){
+
+                HashMap<String, Object> userMap = new HashMap<>();
+                userMap.put(CourseService.allCourses.get(position).getCourseId(), null);
+                db.collection("myCourses").document("{userId}").set(userMap);
+                addButton.setText("Remove from my courses");
+                addButton.setBackground(getResources().getDrawable(R.drawable.cancel_button));
+
+            }else{
+
+                AlertDialog builder = new AlertDialog
+                        .Builder(this).
+                        setTitle("Remove course")
+                        .setMessage("Are you sure you want to remove the course from 'my courses' ?")
+                        .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                HashMap<String, Object> userMap = new HashMap<>();
+                                userMap.put(CourseService.allCourses.get(position).getCourseId(), FieldValue.delete());
+                                db.collection("myCourses").document("{userId}").update(userMap);
+                                addButton.setText("Add to my courses");
+                                addButton.setBackground( getResources().getDrawable(R.drawable.button));
+                            }
+                        })
+                        .setNegativeButton("no", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        }).show();
+            }
         });
     }
 }

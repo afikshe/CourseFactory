@@ -45,7 +45,6 @@ public class Login extends AppCompatActivity {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 Toast.makeText(this, "User logged in successfully", Toast.LENGTH_SHORT).show();
-                Toast.makeText(this, "User created successfully", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(Login.this, Splash.class));
             }else {
                 Toast.makeText(this, task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();

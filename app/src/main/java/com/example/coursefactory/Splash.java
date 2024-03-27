@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.auth.User;
 
 public class Splash extends AppCompatActivity {
@@ -20,6 +21,7 @@ public class Splash extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         CourseService.getAllCoursesNew();
+
 
         new Handler().postDelayed(() ->{
             FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();

@@ -40,7 +40,7 @@ public class Signup extends AppCompatActivity {
         String name = nameEditText.getText().toString();
         String password = passwordEditText.getText().toString();
 
-        UserProfile userProfile = new UserProfile(name);
+        UserProfile userProfile = new UserProfile("null", name, email, "null", 0);
 
         if(email.isEmpty() || name.isEmpty() || password.isEmpty()){
             Toast.makeText(this, "Please enter email, name & password",  Toast.LENGTH_SHORT).show();
@@ -49,6 +49,7 @@ public class Signup extends AppCompatActivity {
 
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener( task -> {
             if(task.isSuccessful()){
+                userProfile.setUserId(FirebaseAuth.getInstance().getCurrentUser().getUid());
                 UserService.setMyUser(userProfile).addOnCompleteListener(task1 -> {
                     if(task.isSuccessful()){
                         Toast.makeText(this, "User created successfully", Toast.LENGTH_SHORT).show();
